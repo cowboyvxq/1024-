@@ -5,15 +5,16 @@
     <van-tabbar route v-if="$route.meta.showTabBar">
       <van-tabbar-item icon="wap-home-o" to="/"> 首页 </van-tabbar-item>
       <van-tabbar-item icon="smile-comment-o" to="/learn">
-        问答
+        <i slot="icon" class="iconfont icon-xuexi"></i>
+        <span class="text">学习</span>
       </van-tabbar-item>
       <van-tabbar-item to="/bink">
         <i slot="icon" class="iconfont icon-icon_luntan-xian"></i>
         <span class="text">Bink</span>
       </van-tabbar-item>
-      <van-tabbar-item icon="setting-o" to="/login">
+      <van-tabbar-item icon="setting-o" to="/mine">
         <i slot="icon" class="iconfont icon-wode"></i>
-        <span class="text">我的</span>
+        <span class="text">{{ $store.state.user ? "我的" : "未登录" }}</span>
       </van-tabbar-item>
     </van-tabbar>
   </div>
@@ -34,7 +35,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-bottom: 60px;
+  padding-bottom: 95px;
 }
 
 #nav {

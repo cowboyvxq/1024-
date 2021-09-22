@@ -88,13 +88,8 @@ export default {
       span {
         font-size: 23px;
         font-weight: 600;
-        // text-shadow: 0 1px 0 #eee;
-        // text-shadow: 0 -1px 0 #123;
+        
         text-shadow: 0 1px 1px rgb(70, 8, 112);
-        // 立体文字
-        // text-shadow: 0px 1px 0px #c0c0c0, 0px 2px 0px #b0b0b0,
-        //   0px 3px 0px #a0a0a0, 0px 4px 0px #909090,
-        //   0px 5px 10px rgba(175, 149, 149, 0.9);
         // 发光文字
         text-shadow: 0 0 0.5em #0ae642, 0 0 0.2em #5c5c5c;
         color: #f7eeee;

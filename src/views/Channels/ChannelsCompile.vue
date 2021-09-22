@@ -2,7 +2,10 @@
   <div class="compile">
     <!-- 我的频道 -->
     <van-cell :border="false">
-      <div slot="title" class="title-text">我的频道</div>
+      <div slot="title" class="title-text">
+        我的频道
+        <span class="t_tips">{{ isEdit ? "点击编辑频道" : "点击进入频道" }}</span>
+        </div>
       <van-button
         type="danger"
         plain
@@ -34,14 +37,16 @@
     </van-grid>
     <!-- 频道推荐 -->
     <van-cell :border="false">
-      <div slot="title" class="title-text">频道推荐</div>
+      <div slot="title" class="title-text">
+        频道推荐
+        <span class="t_tips">点击添加频道</span>
+        </div>
     </van-cell>
     <van-grid class="recommend-grid" :gutter="10">
       <van-grid-item
         v-for="item in moreChannels"
         :key="item.id"
         :text="item.name"
-        icon="plus"
         class="grid-item"
         @click="addChannel(item)"
       />
@@ -50,7 +55,13 @@
 </template>
 
 <script>
-import { getAllChannelAPI } from "@/api/navList";
+import {
+  getAllChannelAPI,
+  deleteUserChannel,
+  addUserChannel,
+} from "@/api/navList";
+import { mapState } from "vuex";
+import { setItem } from "@/utils/stroage";
 // 引入vuex
 export default {
   props: {
@@ -76,6 +87,7 @@ export default {
     this.initAllChannel();
   },
   computed: {
+    ...mapState(["user"]),
     // 更多频道的数据
     moreChannels() {
       // 1. 对数组进行 filter 过滤，返回的是符合条件的新数组
@@ -115,17 +127,47 @@ export default {
           this.$emit("update-active", this.active - 1, true);
         }
 
-        // 4. 处理持久化
-        // this.deleteChannel(channel);
+        // 4. 处理持久化,进行本地存储
+        this.deleteChannel(channel);
       } else {
         // 非编辑状态，执行切换频道
         this.$emit("update-active", index, false);
       }
     },
 
-    addChannel(item) {
+    async addChannel(item) {
       // 将用户点击的频道，添加到“用户频道”列表中
       this.channels.push(item);
+
+      // 数据持久化处理
+      if (this.user) {
+        try {
+          // 已登录，把数据请求接口放到线上
+          await addUserChannel({
+            id: item.id, // 频道ID
+            seq: this.channels.length, // 序号
+          });
+        } catch (err) {
+          this.$toast("保存失败，请稍后重试");
+        }
+      } else {
+        // 未登录，把数据存储到本地
+        setItem("APES_CHANNELS", this.channels);
+      }
+    },
+
+    async deleteChannel(channel) {
+      try {
+        if (this.user) {
+          // 已登录，则将数据更新到线上
+          await deleteUserChannel(channel.id);
+        } else {
+          // 未登录，将数据更新到本地
+          setItem("APES_CHANNELS", this.channels);
+        }
+      } catch (err) {
+        this.$toast("操作失败，请稍后重试");
+      }
     },
   },
   watch: {},
@@ -134,20 +176,24 @@ export default {
 <style lang="less" scoped>
 .compile {
   margin-top: 40px;
-  .title-text {
-    font-size: 25px;
-  }
+ /deep/ .title-text {
+    .t_tips {
+      font-size: 13px;
+      color: #757373;
+    }
+  } 
   .edit-btn {
-    width: 80px;
-    height: 30px;
-    font-size: 18px;
+    width: 60px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 14px;
     color: #f85959;
-    border: 1px solid #f85959;
+    border: 1px solid #757373;
+    margin-bottom: 5px;
   }
 
   /deep/ .grid-item {
-    height: 45px;
-    font-size: 20px;
+    height: 40px;
     width: 90px;
     // overflow: hidden;
     .van-grid-item__content {
@@ -155,12 +201,13 @@ export default {
       white-space: nowrap;
       .van-grid-item__text,
       .text {
-        font-size: 15px;
+        font-size: 13px;
         color: #222;
         margin-top: 0;
       }
       .active {
         color: red;
+        font-weight: 500;
       }
       .van-grid-item__icon-wrapper {
         position: unset;

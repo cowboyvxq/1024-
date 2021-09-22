@@ -23,17 +23,12 @@
           <!-- 头像 -->
           <img :src="artdetails.aut_photo" alt="" class="avatar" />
         </template>
-        <template #default>
-          <div>
-            <!-- 是否关注了作者 -->
-            <van-button type="info" size="mini" v-if="artdetails.is_followed"
-              >已关注</van-button
-            >
-            <van-button icon="plus" type="info" size="mini" plain v-else
-              >关注</van-button
-            >
-          </div>
-        </template>
+
+        <FllowArticle
+          class="follow-btn"
+          v-model="artdetails.is_followed"
+          :user-id="artdetails.aut_id"
+        />
       </van-cell>
 
       <!-- 分割线 -->
@@ -71,7 +66,20 @@
     </div>
     <van-popup v-model="isPostShow" position="bottom">
       <!-- 发布评论对话框 -->
-      <!-- <CommentIssue :target="artdetails.art_id" @post-success="onPostSuccess" /> -->
+      <!-- 发布评论 -->
+      <van-popup v-model="isPostShow" position="bottom">
+        <comment-post
+          :target="artdetails.art_id"
+          @post-success="onPostSuccess"
+        />
+      </van-popup>
+      <van-popup v-model="isReplyShow" position="bottom" style="height: 100%">
+        <comment-reply
+          v-if="isReplyShow"
+          :comment="currentComment"
+          @close="isReplyShow = false"
+        />
+      </van-popup>
     </van-popup>
     <!-- 文章底部固定内容 -->
     <div class="article-bottom">
@@ -83,11 +91,13 @@
         @click="isPostShow = true"
         >写评论</van-button
       >
-      <van-icon
-        class="comment-icon"
-        name="comment-o"
-        :info="totalCommentCount"
-      />
+      <!-- 渲染评论的数量 -->
+      <van-badge 
+      :content="totalCommentCount" 
+      :max="99" 
+      >
+        <van-icon name="comment-o" @click="scrollToBottom" size="25" />
+      </van-badge>
       <collect-article
         class="btn-item"
         v-model="artdetails.is_collected"
@@ -101,7 +111,12 @@
       <van-icon name="share" color="#777777"></van-icon>
     </div>
     <!-- 文章评论 -->
-    <ArtCmt :art-id="articleId"></ArtCmt>
+    <ArtCmt
+      class="art_cmt"
+      :art-id="articleId"
+      @reply-click="onReplyClick"
+      @onload-success="totalCommentCount = $event.total_count"
+    ></ArtCmt>
   </div>
 </template>
 
@@ -111,6 +126,10 @@ import ArtCmt from "../Article/ArtCmt.vue";
 // import CommentIssue from "../comment/comment_issue.vue";
 import CollectArticle from "../Article/CollectArticle.vue";
 import LikesArticle from "../Article/LikesArticle.vue";
+import FllowArticle from "./FllowArticle.vue";
+import CommentPost from "../comment/comment_post.vue";
+import CommentReply from "../comment/comment_reply.vue";
+
 export default {
   props: {
     articleId: {
@@ -126,9 +145,11 @@ export default {
   },
   components: {
     ArtCmt,
-    // CommentIssue,
     CollectArticle,
     LikesArticle,
+    FllowArticle,
+    CommentPost,
+    CommentReply,
   },
   data() {
     return {
@@ -139,6 +160,7 @@ export default {
       totalCommentCount: 0, //评论数量
       currentComment: {}, // 当前点击回复的评论项
       isPostShow: false, // 控制发布评论的显示状态
+      isReplyShow: false,
     };
   },
   created() {
@@ -151,6 +173,8 @@ export default {
         const { data: res } = await getArticleDetailAPI(this.articleId);
         if (res.message === "OK") {
           this.artdetails = res.data;
+          console.log(res);
+          this.totalCommentCount = res.data.comm_count;
         }
       } catch (err) {
         if (err.response && err.response.status === 404) {
@@ -159,11 +183,28 @@ export default {
       }
       this.loading = false;
     },
+    onReplyClick(comment) {
+      this.currentComment = comment;
+
+      // 显示评论回复弹出层
+      this.isReplyShow = true;
+    },
     onPostSuccess(data) {
       // 关闭弹出层
       this.isPostShow = false;
       // 将发布内容显示到列表顶部
       this.commentList.unshift(data.new_obj);
+    },
+    // 滚动到页面底部
+    scrollToBottom() {
+      const gocomment = document.querySelector(".art_cmt");
+
+      // 3. 滚动元素的父容器，使被调用 scrollIntoView() 的元素对用户可见
+      gocomment.scrollIntoView({
+        behavior: "smooth",
+        // 定义垂直方向的对齐（end 表示元素的底端将和其所在滚动区的可视区域的底端对齐）
+        block: "start",
+      });
     },
   },
   watch: {},
@@ -173,6 +214,7 @@ export default {
 .detail {
   width: 100vw;
   padding-top: 50px;
+  height: 100vh;
   /deep/ .error-wrap {
     text-align: center;
     font-size: 25px;
@@ -224,8 +266,8 @@ export default {
     }
 
     .avatar {
-      width: 60px;
-      height: 60px;
+      width: 55px;
+      height: 53px;
       border-radius: 50%;
       background-color: #f8f8f8;
       margin-right: 5px;
@@ -270,13 +312,17 @@ export default {
     height: 45px;
     border-top: 1px solid #d8d8d8;
     background-color: #fff;
+    z-index: 10;
     .comment-btn {
-      width: 250px;
+      width: 185px;
       height: 30px;
       border: 2px solid #eeeeee;
       font-size: 18px;
       line-height: 46px;
       color: #a7a7a7;
+    }
+    /deep/ .van-badge__wrapper {
+      line-height: 0px;
     }
     /deep/ .van-icon {
       font-size: 30px;

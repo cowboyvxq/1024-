@@ -1,211 +1,116 @@
 <template>
-  <div class="search-box">
-    <!-- Header 头部区域 -->
-    <div class="search-header">
-      <!-- 后退按钮 -->
-      <van-icon
-        name="arrow-left"
-        color="white"
-        size="18"
-        class="goback"
-        @click="$router.back()"
-      />
-      <!-- 搜索组件 -->
+  <div class="search-container">
+    <!-- 搜索栏 -->
+    <!--
+      Tips: 在 van-search 外层增加 form 标签，且 action 不为空，即可在 iOS 输入法中显示搜索按钮
+     -->
+    <form class="search-form" action="/">
       <van-search
-        class="s_input"
-        v-model.trim="kw"
+        v-model="searchText"
+        show-action
         placeholder="请输入搜索关键词"
-        background="#007BFF"
-        shape="round"
-        ref="searchRef"
-        @input="onInput"
-        v-if="$route.meta.showSearch"
+        background="#3296fa"
+        @search="onSearch"
+        @cancel="onCancel"
+        @focus="isResultShow = false"
       />
-    </div>
+    </form>
+    <!-- /搜索栏 -->
 
-    <!-- 搜索建议 -->
-    <div class="sugg-list" v-if="kw.length != 0">
-      <div
-        class="sugg-item"
-        v-for="(item, i) in suggestList"
-        :key="i"
-        v-html="item"
-        @click="gotoSearchResult"
-      >
-        {{ item }}
-      </div>
-    </div>
+    <!-- 搜索结果 -->
+    <search-result
+      v-if="isResultShow"
+      :search-text="searchText"
+    />
+    <!-- /搜索结果 -->
 
-    <!-- 搜索历史 -->
-    <div class="search-history" v-else>
-      <!-- 标题 -->
-      <van-cell title="搜索历史">
-        <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-        <template #right-icon>
-          <van-icon name="delete" class="search-icon" @click="history = []" />
-        </template>
-      </van-cell>
+    <!-- 联想建议 -->
+    <search-suggest
+      v-else-if="searchText"
+      :search-text="searchText"
+      @search="onSearch"
+    />
+    <!-- /联想建议 -->
 
-      <!-- 历史列表 -->
-      <div class="history-list">
-        <span
-          class="history-item"
-          v-for="(tag, i) in history"
-          :key="i"
-          @click="gotoSearchResult"
-          >{{ tag }}</span
-        >
-      </div>
-    </div>
+    <!-- 搜索历史记录 -->
+    <search-history
+      v-else
+      :search-histories="searchHistories"
+      @clear-search-histories="searchHistories = []"
+      @search="onSearch"
+    />
+    <!-- /搜索历史记录 -->
   </div>
 </template>
 
 <script>
-import { getSuggestListAPI } from "../../api/search";
+import SearchHistory from '../Search/SearchHistory.vue'
+import SearchSuggest from '../Search/SearchSuggest.vue'
+import SearchResult from '../Search/SearchResult.vue'
+import { setItem, getItem } from '@/utils/stroage'
+
 export default {
-  components: {},
-  data() {
+  name: 'SearchIndex',
+  components: {
+    SearchHistory,
+    SearchSuggest,
+    SearchResult
+  },
+  props: {},
+  data () {
     return {
-      // 搜索建议列表
-      suggestList: [],
-      // 延时器的 Id
-      timerId: null,
-      history: JSON.parse(localStorage.getItem("history") || "[]"),
-      kw: "",
-    };
+      searchText: '',
+      isResultShow: false, // 控制搜索结果的展示
+      searchHistories: getItem('TOUTIAO_SEARCH_HISTORIES') || [] // 搜索的历史记录数据
+    }
   },
-  mounted() {
-    const ipt = document.querySelector("input[type=search]");
-    ipt && ipt.focus();
-  },
-  methods: {
-    // 请求搜索建议列表数据的方法
-    async initSuggestList() {
-      // 调用 API 接口
-      const { data: res } = await getSuggestListAPI(this.kw);
-      if (res.message === "OK") {
-        // 为 suggestList 数据赋值
-        this.suggestList = res.data.options;
-        this.hlightKeywords(res.data.options);
-        // 为 suggestList 数据赋值
-        this.suggestList = res.data.options;
-
-        // 把搜索关键词加入到搜索历史中
-        const newHistory = this.history.filter((item) => item !== this.kw);
-        newHistory.unshift(this.kw);
-        this.history = newHistory;
-      }
-      // 关键词
-      const kw = "js";
-      // 待处理的字符串
-      const str = "JS ArrayBuffer about js";
-
-      // 1. 动态创建正则表达式
-      const reg = new RegExp(kw, "ig");
-      // 2. 调用字符串的 replace 进行替换，第二个参数为回调函数。其中 val 是匹配到的值
-      const newStr = str.replace(reg, (val) => {
-        return `<span>${val}</span>`;
-      });
-      console.log(newStr);
-    },
-    // 搜索组件的输入事件
-    onInput() {
-      clearTimeout(this.timerId);
-
-      // 输入的搜索关键词为空
-      if (this.kw.length === 0) {
-        // 清空搜索建议的列表数据
-        this.suggestList = [];
-        return;
-      }
-
-      this.timerId = setTimeout(() => {
-        this.initSuggestList();
-      }, 500);
-    },
-    // 高亮搜索关键词的方法，形参中的 arr 是搜索建议的数组
-    hlightKeywords(arr) {
-      // 1. 根据用户输入的 kw，动态创建正则表达式
-      const reg = new RegExp(this.kw, "ig");
-
-      // 循环数组中的每一项
-      arr.forEach((item, index) => {
-        // 2. 调用字符串的 replace 方法进行关键字的高亮处理
-        arr[index] = item.replace(reg, (val) => {
-          return `<span style="color: red; font-weight: bold;">${val}</span>`;
-        });
-      });
-    },
-    // 跳转到搜索结果页
-    gotoSearchResult(e) {
-      // e.currentTarget 是当正在触发事件的那个元素
-      // console.log(e.currentTarget.innerText)
-
-      // 1. 获取用户当前点击的搜索建议项的内容
-      const keyword = e.currentTarget.innerText;
-
-      // 2. 通过编程式导航 API，跳转到搜索结果页
-      this.$router.push("/search/" + keyword);
-      this.kw = keyword;
-    },
-  },
+  computed: {},
   watch: {
-    // 监视历史记录的变化
-    history(newVal) {
-      // 持久化存储到本地
-      localStorage.setItem("history", JSON.stringify(newVal));
-    },
+    searchHistories (value) {
+      setItem('TOUTIAO_SEARCH_HISTORIES', value)
+    }
+    // searchHistories: {
+    //   handler () {}
+    // }
   },
-};
-</script>
-<style lang="less" scoped>
-.search-box {
-  /deep/ .search-header {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    background-color: #007bff;
-    .goback {
-      font-size: 30px!important;
-      color: red;
-      z-index: 10;
-    }
-    .s_input {
-      width: 100%;
-      padding-left: 5px!important;
-    }
-  }
+  created () {},
+  mounted () {},
+  methods: {
+    onSearch (val) {
+      // 更新文本框内容
+      this.searchText = val
 
-  .sugg-list {
-    .sugg-item {
-      padding: 0 15px;
-      border-bottom: 1px solid #f8f8f8;
-      font-size: 14px;
-      line-height: 50px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-  .search-history {
-    .search-icon {
-      font-size: 20px;
-      line-height: inherit;
-      color: rgb(187, 171, 171);
-    }
-
-    .history-list {
-      padding: 0 10px;
-      .history-item {
-        display: inline-block;
-        font-size: 17px;
-        padding: 8px 14px;
-        background-color: #efefef;
-        margin: 10px 8px 0px 8px;
-        border-radius: 10px;
-        color: rgb(67, 68, 68);
+      // 存储搜索历史记录
+      // 要求：不要有重复历史记录、最新的排在最前面
+      const index = this.searchHistories.indexOf(val)
+      if (index !== -1) {
+        this.searchHistories.splice(index, 1)
       }
+      this.searchHistories.unshift(val)
+
+      // 渲染搜索结果
+      this.isResultShow = true
+    },
+
+    onCancel () {
+      this.$router.back()
     }
+  }
+}
+</script>
+
+<style scoped lang="less">
+.search-container {
+  padding-top: 58px;
+  .van-search__action {
+    color: #fff;
+  }
+  .search-form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
   }
 }
 </style>

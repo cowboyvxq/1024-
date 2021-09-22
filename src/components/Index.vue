@@ -48,6 +48,9 @@ import Headings from "../views/Header/Headings.vue";
 // 文章组件
 import ArticleList from "../views/Article/ArticleList.vue";
 import ChannelsCompile from "../views/Channels/ChannelsCompile.vue";
+
+import { getItem } from '@/utils/stroage'
+
 // 引入vuex
 import { mapState } from "vuex";
 export default {
@@ -70,13 +73,40 @@ export default {
     this.loadChannels();
   },
   computed: {
-    ...mapState(["show"]),
+    ...mapState(["user"]),
   },
   methods: {
     // 获取用户频道列表数据
     async loadChannels() {
-      const { data: res } = await getChannelApi();
-      this.channels = res.data.channels;
+      // const { data: res } = await getChannelApi();
+      // this.channels = res.data.channels;
+
+      try {
+        // const { data } = await getUserChannels()
+        // this.channels = data.data.channels
+        let channels = []
+
+        if (this.user) {
+          // 已登录，请求获取用户频道列表
+          const { data } = await getChannelApi()
+          channels = data.data.channels
+        } else {
+          // 未登录，判断是否有本地的频道列表数据
+          const localChannels = getItem('APES_CHANNELS')
+          //    有，拿来使用
+          if (localChannels) {
+            channels = localChannels
+          } else {
+            //    没有，请求获取默认频道列表
+            const { data } = await getChannelApi()
+            channels = data.data.channels
+          }
+        }
+
+        this.channels = channels
+      } catch (err) {
+        this.$toast('获取频道数据失败')
+      }
     },
 
     onUpdateActive(index, isChennelEditShow = true) {

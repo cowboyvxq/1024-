@@ -1,17 +1,19 @@
 import instance from "../utils/instance";
-// 获取文章下评论数据的 API
-export const getCmtListAPI = (artId, offset) => {
-  return instance.get("/v1_0/comments", {
-    params: {
-      // a 表示获取文章下的评论
-      type: "a",
-      // 文章的 Id
-      source: artId,
-      // 获取评论数据的偏移量，值为评论的 id。表示从此 id 的数据向后取，不传表示从第一页开始读取数据
-      offset,
-    },
-  });
-};
+import store from "../store/index";
+
+/**
+ * 获取文章评论列表
+ */
+export const getComments = params => {
+  return instance({
+    method: 'GET',
+    url: '/v1_0/comments',
+    // GET 参数使用 params 进行传递
+    // 我们写的时候是对象，但是最终发给后端的数据是？
+    // axios 会把 params 对象转为 key=value?key=value 的格式放到 url 中发送
+    params
+  })
+}
 
 /**
  * 获取文章列表
@@ -45,6 +47,9 @@ export const addCollect = (target) => {
     data: {
       target,
     },
+    headers: {
+      Authorization: `Bearer ${store.state.user.token}`,
+    },
   });
 };
 
@@ -61,13 +66,13 @@ export const deleteCollect = (target) => {
 /**
  * 点赞文章
  */
-export const addLike = (target) => {
+export const addLike = target => {
   return instance({
     method: "POST",
     url: "/v1_0/article/likings",
     data: {
-      target,
-    },
+      target
+    }
   });
 };
 

@@ -6,15 +6,15 @@
         <div class="art-title">
           <span>{{ title }}</span>
           <!-- 单张图片 -->
-          <img :src="cover.images[0]" alt="" v-if="cover.type === 1" />
+          <img :src="cover.images[0]" alt="" v-if="cover.type === 1" v-lazy="cover.images[0]"/>
         </div>
         <!-- 三张图片下的封面 -->
         <div class="thumb-box" v-if="cover.type === 3">
           <img
             :src="item"
-            alt=""
             v-for="(item, index) in cover.images"
             :key="index"
+            v-lazy="item"
           />
         </div>
       </template>

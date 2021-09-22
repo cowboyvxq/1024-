@@ -15,7 +15,7 @@
 
       <!-- 评论的回复列表 -->
       <van-cell title="全部回复" />
-      <art-cmt :list="commentList" :source="comment.com_id" type="c" />
+      <ArtCmt :list="commentList" :source="comment.com_id" type="c" />
       <!-- /评论的回复列表 -->
     </div>
 
@@ -33,23 +33,24 @@
 
     <!-- 发布评论 -->
     <van-popup v-model="isPostShow" position="bottom">
-      <comment-post :target="comment.com_id" @post-success="onPostSuccess" />
+      <comment-post 
+      :target="comment.com_id" 
+      @post-success="onPostSuccess" />
     </van-popup>
     <!-- /发布评论 -->
   </div>
 </template>
 
 <script>
-import ArtCmt from '../Article/ArtCmt.vue';
 // import CommentItem from './comment-item'
-import CommentPost from "./comment_post.vue";
+import ArtCmt from "./ArtCmt.vue";
+import CommentPost from "./comment-post";
 
 export default {
   name: "CommentReply",
   components: {
-    // CommentItem,
     ArtCmt,
-    CommentPost
+    CommentPost,
   },
   props: {
     comment: {
@@ -68,15 +69,12 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    onPostSuccess(data) {
+    onPostSuccess() {
       // 更新回复的数量
-      this.comment.reply_count++;
+      // this.comment.reply_count++
 
       // 关闭弹层
       this.isPostShow = false;
-
-      // 将最新回复的内容展示到列表的顶部
-      this.commentList.unshift(data.new_obj);
     },
   },
 };

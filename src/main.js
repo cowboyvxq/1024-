@@ -63,10 +63,34 @@ Vue.use(Loading);
 import { Search } from 'vant';
 Vue.use(Search);
 
+import { Toast } from 'vant';
+Vue.use(Toast);
+
 // 轮博图
 import { Swipe, SwipeItem } from "vant";
 Vue.use(Swipe);
 Vue.use(SwipeItem);
+
+import { Image as VanImage } from 'vant';
+Vue.use(VanImage);
+
+import { Dialog } from 'vant';
+Vue.use(Dialog);
+
+import { Picker } from 'vant';
+Vue.use(Picker);
+
+import { DatetimePicker } from 'vant';
+Vue.use(DatetimePicker);
+
+import { Badge } from 'vant';
+Vue.use(Badge);
+
+// 图片懒加载
+import { Lazyload } from 'vant';
+Vue.use(Lazyload, {
+  lazyComponent: true,
+});
 
 new Vue({
   router,

@@ -9,11 +9,15 @@ import ArticleDetail from "../views/Article/ArticleDetail.vue";
 
 import Serum from "../views/Bink/Serum.vue";
 // 登录组件
-// import Login from "../views/Login/Login.vue";
+import Login from "../views/Login/Login.vue";
 
 import Search from "../views/Header/Search.vue";
 
 import SearchResult from "../components/SearchResult.vue";
+
+import UserDetails from "../views/User/UserDetails.vue";
+
+import Mine from "../views/User/Mine.vue";
 
 Vue.use(VueRouter);
 
@@ -57,12 +61,12 @@ const routes = [
     component: Serum,
   },
   // 登录页面
-  // {
-  //   path: "/login",
-  //   name: "login",
-  //   component: Login,
-  //   meta: { showTabBar: true },
-  // },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+    meta: { showTabBar: true },
+  },
   {
     path: "/search",
     name: "search",
@@ -75,6 +79,17 @@ const routes = [
     name: "search-result",
     props: true,
     meta: { showSearch: true },
+  },
+  {
+    path: "/user/profile",
+    name: "user-profile",
+    component: UserDetails,
+  },
+  {
+    path: "/mine",
+    name: "mine",
+    component: Mine,
+    meta: { showTabBar: true },
   },
 ];
 

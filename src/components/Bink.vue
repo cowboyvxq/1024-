@@ -34,7 +34,11 @@
         error-text="请求失败,点击重新加载"
       >
         <section class="main">
-          <section class="every" v-for="item in titleList" :key="item.id">
+          <section
+            class="every"
+            v-for="(item, index) in titleList"
+            :key="index"
+          >
             <router-link :to="`/serum/${item.id}`">
               <p class="cont-title">
                 <span class="tips-btn">{{
@@ -42,6 +46,7 @@
                 }}</span>
                 {{ item.title }}
               </p>
+              <div v-html="item.content" class="b_content"></div>
               <p class="author">
                 <img class="avatar" :src="item.author.avatar_url" alt="" />
                 <span class="loginname">{{ item.author.loginname }}</span>
@@ -122,7 +127,7 @@ export default {
         .then((res) => {
           this.titleList = [...this.titleList, ...res.data.data];
           fn && fn();
-          // console.log(this.data);
+          console.log(this.titleList);
         })
         .catch((error) => {
           console.log(error);
@@ -162,7 +167,7 @@ export default {
     font-size: 18px;
     background-color: #fff;
     padding-left: 10px;
-    box-shadow: 1px 0 4px rgb(229, 226, 226);
+    box-shadow: 2px 0 7px #e2e1e1;
     a {
       margin-right: 10px;
       color: rgb(177, 174, 174);
@@ -187,18 +192,58 @@ export default {
           color: #2f2f2f;
           word-break: break-all;
           outline: none;
-          line-height: 24px;
+          line-height: 25px;
+          padding-top: 10px;
+          margin: 0;
           .tips-btn {
             font-size: 14px !important;
             padding: 3px 5px;
             color: rgb(248, 246, 247);
-            background-color: #f581c8;
+            background-color: #fa99d5;
+          }
+        }
+        /deep/ .b_content {
+          text-overflow: -o-ellipsis-lastline;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          -webkit-box-orient: vertical;
+          margin-bottom: 15px;
+          color: rgb(170, 167, 167);
+          font-size: 13px;
+          margin-top: -5px;
+          .markdown-text {
+            p {
+              margin-top: 10px;
+              color: #7e7b7d;
+              a {
+                color: #8e7a7a;
+              }
+
+              img {
+                display: none;
+              }
+            }
+            ul {
+              li {
+                a {
+                  color: #5a5558;
+                }
+              }
+            }
+            h2,
+            h1 {
+              display: none;
+            }
           }
         }
         .author {
           display: flex;
           align-items: center;
           margin-top: -10px;
+          margin-bottom: 8px;
           .loginname {
             width: 70px;
             text-overflow: ellipsis;
@@ -221,13 +266,15 @@ export default {
           }
           .visit_count {
             margin-left: 5px;
+            color: #9399ba;
           }
           .issue {
             // display: inline-block;
-            color: #8e7a7a;
+            color: #ccbcb4;
             margin-left: 30px;
             white-space: nowrap;
-            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-family: "Franklin Gothic Medium", "Arial Narrow", Arial,
+              sans-serif;
           }
         }
       }

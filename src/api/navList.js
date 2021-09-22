@@ -17,3 +17,26 @@ export const updateUserChannelAPI = channels => {
     channels
   })
 }
+
+/**
+ * 添加用户频道
+ */
+export const addUserChannel = channel => {
+  return instance({
+    method: "PATCH",
+    url: "/v1_0/user/channels",
+    data: {
+      channels: [channel]
+    }
+  });
+};
+
+/**
+ * 删除用户指定频道
+ */
+export const deleteUserChannel = channelId => {
+  return instance({
+    method: "DELETE",
+    url: `/v1_0/user/channels/${channelId}`
+  });
+};

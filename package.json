@@ -10,6 +10,7 @@
   "dependencies": {
     "@vue/cli": "^4.5.13",
     "core-js": "^3.6.5",
+    "cropperjs": "^1.5.12",
     "dayjs": "^1.10.6",
     "json-bigint": "^1.0.0",
     "utils": "^0.3.1",

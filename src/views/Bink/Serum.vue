@@ -12,18 +12,21 @@
         <span class="original" v-if="serumitem.visit_count > 2000">原创</span>
       </p>
       <div class="issue-date">
-        <span>{{ shear(serumitem.last_reply_at) }}</span>
-        <span class="timer">{{ cut(serumitem.last_reply_at) }}</span>
+        <span>{{ serumitem.last_reply_at }}</span>
+        <!-- <span class="timer">{{ serumitem.last_reply_at }}</span> -->
       </div>
       <div class="user">
         <div class="user-info">
           <img :src="serumitem.author.avatar_url" alt="" />
           <div class="login-info">
             <div>{{ serumitem.author.loginname }}</div>
-            <div>码龄2年</div>
+            <div>码龄{{CodeAge(serumitem.create_at)}}</div>
           </div>
         </div>
-        <div class="attention">关注</div>
+        <div class="attention">
+          <van-icon name="plus" />
+          <span>关注</span>
+          </div>
       </div>
       <div class="main-point" v-html="serumitem.content"></div>
       <!-- 文章内容 -->
@@ -58,19 +61,32 @@ export default {
         .get(`https://cnodejs.org/api/v1/topic/${this.$route.params.id}`)
         .then((res) => {
           this.serumitem = res.data.data;
-          // this.loading = false;
-          // console.log(this.serumitem);
+          console.log(res);
         })
         .catch((error) => {
           console.log(error);
         });
     },
     // 发布日期
-    shear(time) {
-      return time.substr(0, 10);
-    },
-    cut(time) {
-      return time.substring(11, 19);
+    // shear(time) {
+    //   return time.substring(0, 10);
+    // },
+    // cut(time) {
+    //   return time.substring(11, 19);
+    // },
+     CodeAge(time) {
+      time = (Date.now() - new Date(time).getTime()) / 1000;
+      if (time < 3600) {
+        return ~~(time / 60) + "分钟";
+      } else if (time < 86400) {
+        return ~~(time / 3600) + "小时";
+      } else if (time < 2592000) {
+        return ~~(time / 86400) + "天";
+      } else if (time < 31104000) {
+        return ~~(time / 2592000) + "个月";
+      } else {
+        return ~~(time / 31104000) + "年";
+      }
     },
   },
   watch: {},
@@ -130,14 +146,18 @@ export default {
           div {
             line-height: 24px;
             color: #555666;
+            font-size: 13px;
           }
         }
       }
       .attention {
-        padding: 5px 15px;
+        display: flex;
+        align-items: center;
+        padding: 3px 13px;
         border-radius: 20px;
-        border: solid red 1px;
-        color: coral;
+        color: #fff;
+        justify-content: center;
+        background-color: #409ff8;
       }
     }
     .serum-title {
@@ -156,6 +176,14 @@ export default {
       margin-top: -5px !important;
       .timer {
         margin-left: 10px;
+      }
+    }
+
+    .main-point {
+      .markdown-text {
+         p {
+           word-break: break-all;
+         }
       }
     }
   }
