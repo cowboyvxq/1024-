@@ -18,6 +18,20 @@ export default new Vuex.Store({
     user: getItem(TOKEN_KEY),
     kw:''
   },
+  getters: {
+  // 用户头像的计算属性
+  userAvatar(state) {
+    // 默认的头像地址
+    let imgSrc = 'http://www.liulongbin.top:8000/uploads/1632412808158.blob'
+
+    // 如果用户信息对象中包含 photo 属性的值，则为 imgSrc 重新赋值
+    // if (state.user.photo) {
+    //   imgSrc = state.user.photo
+    // }
+
+    return imgSrc
+  }
+},
   mutations: {
      setUser (state, data) {
       state.user = data

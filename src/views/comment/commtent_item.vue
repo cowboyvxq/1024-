@@ -77,11 +77,11 @@ export default {
       try {
         if (this.comment.is_liking) {
           // 已赞，取消点赞
-          await delLikeCmtAPI(this.comment.com_id);
+          await delLikeCmtAPI(this.comment.com_id.toString());
           // this.comment.like_count--
         } else {
           // 没有点赞，添加点赞
-          await addLikeCmtAPI(this.comment.com_id);
+          await addLikeCmtAPI(this.comment.com_id.toString());
           // this.comment.like_count++
         }
         // this.comment.is_liking = !this.comment.is_liking

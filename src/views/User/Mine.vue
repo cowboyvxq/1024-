@@ -60,8 +60,9 @@
     </van-grid>
     <!-- /宫格导航 -->
 
-    <van-cell title="消息通知" is-link />
-    <van-cell class="mb-9" title="浏览记录" is-link />
+    <van-cell icon='chat-o' title="消息通知" is-link />
+    <van-cell class="mb-9" icon="clock-o"  title="浏览记录" is-link />
+    <van-cell icon="chat-o" title="小思同学" is-link to="/chat" />
     <van-cell
       v-if="user"
       class="logout-cell"

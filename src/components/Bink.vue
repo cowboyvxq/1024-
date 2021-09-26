@@ -127,7 +127,6 @@ export default {
         .then((res) => {
           this.titleList = [...this.titleList, ...res.data.data];
           fn && fn();
-          console.log(this.titleList);
         })
         .catch((error) => {
           console.log(error);

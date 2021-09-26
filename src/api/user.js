@@ -72,18 +72,18 @@ export const updateUserPhoto = (data) => {
 /**
  * 关注用户
  */
-export const addFollow = (target) => {
+export const addFollow = target => {
   return instance({
-    method: "POST",
-    url: "/v1_0/user/followings",
+    method: 'POST',
+    url: '/v1_0/user/followings',
     data: {
-      target,
+      target
     },
     headers: {
       Authorization: `Bearer ${store.state.user.token}`,
     },
-  });
-};
+  })
+}
 
 /**
  * 取消关注用户

@@ -61,19 +61,12 @@ export default {
         .get(`https://cnodejs.org/api/v1/topic/${this.$route.params.id}`)
         .then((res) => {
           this.serumitem = res.data.data;
-          console.log(res);
+          console.log(this.serumitem.author.avatar_url);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    // 发布日期
-    // shear(time) {
-    //   return time.substring(0, 10);
-    // },
-    // cut(time) {
-    //   return time.substring(11, 19);
-    // },
      CodeAge(time) {
       time = (Date.now() - new Date(time).getTime()) / 1000;
       if (time < 3600) {

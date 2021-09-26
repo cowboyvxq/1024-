@@ -48,7 +48,7 @@
               <div class="abstract">{{ userData[index].abstract }}</div>
               <div class="user_info">
                 <div class="author">作者:{{ userData[index].nickname }}</div>
-                <div class="add_time">{{userData[index].add_time_str}}</div>
+                <div class="add_time">{{ userData[index].add_time_str }}</div>
               </div>
             </div>
           </div>
@@ -117,7 +117,6 @@ export default {
     getUserData() {
       this.axios.get("/data/p1.json").then((res) => {
         this.userData = res.data;
-        console.log(this.userData);
       });
     },
   },

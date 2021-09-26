@@ -2,6 +2,7 @@
  * 评论请求模块
  */
 import instance from '@/utils/instance'
+import store from '../store/index'
 
 // 获取文章下评论数据的 API
 export const getCmtListAPI = (artId, offset) => {
@@ -17,11 +18,13 @@ export const getCmtListAPI = (artId, offset) => {
   })
 }
  
-// 评论点赞的 API
+/**
+ * 评论点赞
+ */
 export const addLikeCmtAPI = cmtId => {
   return instance.post('/v1_0/comment/likings', {
     target: cmtId,
-    headers: {
+      headers: {
       Authorization: `Bearer ${store.state.user.token}`,
     },
   })

@@ -92,10 +92,7 @@
         >写评论</van-button
       >
       <!-- 渲染评论的数量 -->
-      <van-badge 
-      :content="totalCommentCount" 
-      :max="99" 
-      >
+      <van-badge :content="totalCommentCount" :max="99">
         <van-icon name="comment-o" @click="scrollToBottom" size="25" />
       </van-badge>
       <collect-article
@@ -106,7 +103,7 @@
       <likes-article
         class="btn-item"
         v-model="artdetails.attitude"
-        :articleId="artdetails.art_id"
+        :article-id="artdetails.art_id"
       />
       <van-icon name="share" color="#777777"></van-icon>
     </div>
@@ -129,7 +126,6 @@ import LikesArticle from "../Article/LikesArticle.vue";
 import FllowArticle from "./FllowArticle.vue";
 import CommentPost from "../comment/comment_post.vue";
 import CommentReply from "../comment/comment_reply.vue";
-
 export default {
   props: {
     articleId: {

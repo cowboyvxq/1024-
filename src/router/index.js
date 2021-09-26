@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Index from "../components/Index.vue";
 import Learn from "../components/Learn.vue";
-import User from "../components/User.vue";
 import Bink from "../components/Bink.vue";
 // 文章详情组件
 import ArticleDetail from "../views/Article/ArticleDetail.vue";
@@ -18,6 +17,9 @@ import SearchResult from "../components/SearchResult.vue";
 import UserDetails from "../views/User/UserDetails.vue";
 
 import Mine from "../views/User/Mine.vue";
+
+// 导入小猿同学的组件页面
+import Chat from '../components/Chat.vue'
 
 Vue.use(VueRouter);
 
@@ -37,11 +39,6 @@ const routes = [
     name: "learn",
     component: Learn,
     meta: { showTabBar: true },
-  },
-  {
-    path: "/user",
-    name: "user",
-    component: User,
   },
   {
     path: "/bink",
@@ -91,6 +88,7 @@ const routes = [
     component: Mine,
     meta: { showTabBar: true },
   },
+   { path: '/chat', component: Chat, name: 'chat' }
 ];
 
 const router = new VueRouter({
