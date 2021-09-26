@@ -45,10 +45,10 @@
               <div class="r_title">
                 {{ item.title }}
               </div>
-              <div class="abstract">{{ userData[index].abstract }}</div>
+              <div class="abstract">项目简介动力节点老师讲解的图书馆管理小项目，主要目的是让学完JavaSE的同学对之前掌握的知识做一些运用，该项目应用的知识点包括下面内容：面向对象的思想分层的思想接口异常集合日期处理Stream流IO流反射Javafx（了解）css（了解）通过学习本项目，可以巩固JavaSE的知识，对于后续的学习来说可以起到很好的衔接。环境搭建1. 基本信息开发工具：IDEAJD</div>
               <div class="user_info">
-                <div class="author">作者:{{ userData[index].nickname }}</div>
-                <div class="add_time">{{ userData[index].add_time_str }}</div>
+                <div class="author">作者:鸿蒙社区</div>
+                <div class="add_time">{{ (index + 4) % 3 === 0 ? '6' : (index + 4) % 3 }} 小时前</div>
               </div>
             </div>
           </div>
@@ -74,12 +74,13 @@ export default {
       // 存储文章数据
       articleList: [],
       error: false,
-      userData: [],
+      // userData: [],
     };
   },
   created() {
     this.getListData();
-    this.getUserData();
+    // this.getUserData();
+
   },
   methods: {
     async getListData(isRefresh) {
@@ -102,6 +103,7 @@ export default {
           this.finished = true;
         }
       }
+      
     },
 
     // 上拉触底，请求下一页数据
@@ -114,18 +116,19 @@ export default {
       this.isLoading = false;
     },
 
-    getUserData() {
-      this.axios.get("/data/p1.json").then((res) => {
-        this.userData = res.data;
-      });
-    },
+    // getUserData() {
+    //   this.axios.get("/data/p1.json").then((res) => {
+    //     this.userData = res.data;
+    //   });
+    // },
   },
   watch: {},
 };
 </script>
 <style lang="less" scoped>
 .learn {
-  padding-bottom: 50px;
+  padding-bottom: 30px;
+  padding-right: 10px;
   .content {
     .c_item {
       display: flex;

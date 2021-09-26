@@ -72,24 +72,33 @@ export default {
         return ~~(time / 31104000) + "年前";
       }
     },
-    async onCommentLike() {
-      this.commentLoading = true;
-      try {
-        if (this.comment.is_liking) {
-          // 已赞，取消点赞
-          await delLikeCmtAPI(this.comment.com_id.toString());
-          // this.comment.like_count--
-        } else {
-          // 没有点赞，添加点赞
-          await addLikeCmtAPI(this.comment.com_id.toString());
-          // this.comment.like_count++
-        }
-        // this.comment.is_liking = !this.comment.is_liking
-      } catch (err) {
-        this.$toast("操作失败，请重试");
+    onCommentLike() {
+      if (this.comment.is_liking) {
+        this.comment.is_liking = false;
+        this.comment.like_count--;
+      } else {
+        this.comment.like_count++;
+        this.comment.is_liking = true;
       }
-      this.commentLoading = false;
     },
+    // async onCommentLike() {
+    //   this.commentLoading = true;
+    //   try {
+    //     if (this.comment.is_liking) {
+    //       // 已赞，取消点赞
+    //       await delLikeCmtAPI(this.comment.com_id.toString());
+    //       // this.comment.like_count--
+    //     } else {
+    //       // 没有点赞，添加点赞
+    //       await addLikeCmtAPI(this.comment.com_id.toString());
+    //       // this.comment.like_count++
+    //     }
+    //     // this.comment.is_liking = !this.comment.is_liking
+    //   } catch (err) {
+    //     this.$toast("操作失败，请重试");
+    //   }
+    //   this.commentLoading = false;
+    // },
   },
 };
 </script>

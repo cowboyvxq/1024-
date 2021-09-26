@@ -86,6 +86,9 @@ Vue.use(DatetimePicker);
 import { Badge } from 'vant';
 Vue.use(Badge);
 
+import { ImagePreview } from 'vant';
+Vue.use(ImagePreview);
+
 // 图片懒加载
 import { Lazyload } from 'vant';
 Vue.use(Lazyload, {

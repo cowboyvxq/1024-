@@ -35,7 +35,11 @@
       <van-divider></van-divider>
 
       <!-- 文章内容 -->
-      <div class="art-content" v-html="artdetails.content"></div>
+      <div
+        class="art-content"
+        ref="art-content"
+        v-html="artdetails.content"
+      ></div>
 
       <!-- 分割线 -->
       <van-divider>End</van-divider>
@@ -46,7 +50,7 @@
           icon="good-job"
           type="danger"
           size="small"
-          v-if="artdetails.attitude === 1"
+          v-if="liking === '1'"
           >已点赞</van-button
         >
         <van-button icon="good-job-o" type="danger" plain size="small" v-else
@@ -97,13 +101,15 @@
       </van-badge>
       <collect-article
         class="btn-item"
-        v-model="artdetails.is_collected"
+        v-model="collected"
         :article-id="artdetails.art_id"
+        @onCollect="onCollect"
       />
       <likes-article
         class="btn-item"
-        v-model="artdetails.attitude"
+        v-model="liking"
         :article-id="artdetails.art_id"
+        @onLikes="onLikes"
       />
       <van-icon name="share" color="#777777"></van-icon>
     </div>
@@ -126,6 +132,7 @@ import LikesArticle from "../Article/LikesArticle.vue";
 import FllowArticle from "./FllowArticle.vue";
 import CommentPost from "../comment/comment_post.vue";
 import CommentReply from "../comment/comment_reply.vue";
+import { ImagePreview } from "vant";
 export default {
   props: {
     articleId: {
@@ -157,10 +164,18 @@ export default {
       currentComment: {}, // 当前点击回复的评论项
       isPostShow: false, // 控制发布评论的显示状态
       isReplyShow: false,
+      collected: "1",
+      liking: "1",
     };
   },
   created() {
     this.initArticle();
+    let collected = localStorage.getItem("collected");
+    this.collected = collected;
+
+    let likes = localStorage.getItem("artlikes");
+    this.liking = likes;
+    console.log(typeof collected);
   },
   methods: {
     //   初始化文章的数据
@@ -178,6 +193,51 @@ export default {
         }
       }
       this.loading = false;
+      setTimeout(() => {
+        this.previewImage();
+      }, 0);
+    },
+    // 图片放大预览
+    previewImage() {
+      const articleContent = this.$refs["art-content"];
+      const imgs = articleContent.querySelectorAll("img");
+      console.log(imgs);
+      const images = [];
+      imgs.forEach((img, index) => {
+        images.push(imgs.src);
+        img.onclick = () => {
+          ImagePreview({
+            images,
+            startPositon: index,
+          });
+        };
+      });
+    },
+    // 文章点赞
+    onLikes() {
+      // console.log(this.value);
+      if (this.liking === "1") {
+        this.liking = "-1";
+        this.$toast.success("取消点赞");
+        localStorage.setItem("artlikes", JSON.parse(this.liking));
+      } else {
+        this.liking = "1";
+        this.$toast.success("点赞成功");
+        localStorage.setItem("artlikes", JSON.parse(this.liking));
+      }
+    },
+    // 收藏文章
+    onCollect() {
+      if (this.collected === "1") {
+        this.collected = "-1";
+        this.$toast.success("取消收藏");
+        localStorage.setItem("collected", JSON.parse(this.collected));
+      } else {
+        this.collected = "1";
+        this.$toast.success("收藏成功");
+        localStorage.setItem("collected", JSON.parse(this.collected));
+      }
+      console.log(this.collected);
     },
     onReplyClick(comment) {
       this.currentComment = comment;
