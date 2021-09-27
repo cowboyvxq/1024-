@@ -36,13 +36,15 @@
           </div>
         </div>
       </div>
-      <div class="login">登录</div>
+      <div class="login" v-if='!user' @click="$router.push('/login')">登录</div>
+      <div class="login" v-if='user' @click='$router.push("/mine")'>我的</div>
     </div>
   </div>
 </template>
 
 <script>
 // import Search from "./Search.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     // Search,
@@ -50,21 +52,9 @@ export default {
   data() {
     return {};
   },
-  // mounted() {
-  //   let canvas = this.$refs.logo;
-  //   let logo = canvas.getContext("2d");
-  //   logo.font = "30px Arial";
-  //   let grd = logo.createLinearGradient(0, 0, canvas.width, 0); //渐变
-  //   grd.addColorStop("0", "magenta");
-  //   grd.addColorStop("0.3", "#fc5531");
-  //   grd.addColorStop("0.6", "#fd775a");
-  //   grd.addColorStop("1.0", "red");
-  //   logo.fillStyle = grd; //使用渐变填充
-  //   logo.textAlign = "center";
-  //   logo.textBaseline = "middle";
-  //   logo.strokeStyle = grd;
-  //   logo.strokeText("猿", 20, 20, 35);
-  // },
+  computed:{
+    ...mapState(["user"]),
+  },
   methods: {},
   watch: {},
 };

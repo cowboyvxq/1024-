@@ -14,7 +14,10 @@ export const getAllChannelAPI = () => {
 // 更新用户频道列表数据的 API
 export const updateUserChannelAPI = channels => {
   return instance.put('/v1_0/user/channels', {
-    channels
+    channels,
+      headers: {
+      Authorization: `Bearer ${store.state.user.token}`,
+    },
   })
 }
 

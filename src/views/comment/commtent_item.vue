@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { addLikeCmtAPI, delLikeCmtAPI } from "@/api/comment";
+// import { addLikeCmtAPI, delLikeCmtAPI } from "@/api/comment";
 
 export default {
   name: "CommentItem",

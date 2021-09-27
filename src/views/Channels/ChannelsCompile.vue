@@ -135,39 +135,39 @@ export default {
       }
     },
 
-    async addChannel(item) {
+   addChannel(item) {
       // 将用户点击的频道，添加到“用户频道”列表中
       this.channels.push(item);
 
       // 数据持久化处理
-      if (this.user) {
-        try {
-          // 已登录，把数据请求接口放到线上
-          await addUserChannel({
-            id: item.id, // 频道ID
-            seq: this.channels.length, // 序号
-          });
-        } catch (err) {
-          this.$toast("保存失败，请稍后重试");
-        }
-      } else {
+      // if (this.user) {
+      //   try {
+      //     // 已登录，把数据请求接口放到线上
+      //     await addUserChannel({
+      //       id: item.id, // 频道ID
+      //       seq: this.channels.length, // 序号
+      //     });
+      //   } catch (err) {
+      //     this.$toast("保存失败，请稍后重试");
+      //   }
+      // } else {
         // 未登录，把数据存储到本地
         setItem("APES_CHANNELS", this.channels);
-      }
+      // }
     },
 
-    async deleteChannel(channel) {
-      try {
-        if (this.user) {
-          // 已登录，则将数据更新到线上
-          await deleteUserChannel(channel.id);
-        } else {
-          // 未登录，将数据更新到本地
+    deleteChannel() {
+      // try {
+      //   if (this.user) {
+      //     // 已登录，则将数据更新到线上
+      //     await deleteUserChannel(channel.id);
+      //   } else {
+      //     // 未登录，将数据更新到本地
+      //   }
+      // } catch (err) {
           setItem("APES_CHANNELS", this.channels);
-        }
-      } catch (err) {
-        this.$toast("操作失败，请稍后重试");
-      }
+        // this.$toast("操作失败，请稍后重试");
+      // }
     },
   },
   watch: {},

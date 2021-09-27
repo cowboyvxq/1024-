@@ -17,9 +17,9 @@
       </div>
       <div class="user">
         <div class="user-info">
-          <img :src="serumitem.author.avatar_url" alt="" />
+          <img src="https://avatars.githubusercontent.com/u/958063?v=4&s=120" alt="" />
           <div class="login-info">
-            <div>{{ serumitem.author.loginname }}</div>
+            <div>梦想像笔檫</div> 
             <div>码龄{{CodeAge(serumitem.create_at)}}</div>
           </div>
         </div>
@@ -41,6 +41,7 @@
 
 <script>
 import Discuss from "../Bink/Discuss.vue";
+// import { ImagePreview } from "vant";
 export default {
   components: {
     Discuss,
@@ -66,7 +67,29 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+
+         setTimeout(() => {
+        this.previewImage();
+      }, 0);
     },
+
+    //  // 图片放大预览
+    // previewImage() {
+    //   const articleContent = this.$refs["art-content"];
+    //   const imgs = articleContent.querySelectorAll("img");
+    //   console.log(articleContent);
+    //   console.log(imgs);
+    //   const images = [];
+    //   imgs.forEach((img, index) => {
+    //     images.push(imgs.src);
+    //     img.onclick = () => {
+    //       ImagePreview({
+    //         images,
+    //         startPositon: index,
+    //       });
+    //     };
+    //   });
+    // },
      CodeAge(time) {
       time = (Date.now() - new Date(time).getTime()) / 1000;
       if (time < 3600) {

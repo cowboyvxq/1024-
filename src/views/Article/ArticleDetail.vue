@@ -200,6 +200,7 @@ export default {
     // 图片放大预览
     previewImage() {
       const articleContent = this.$refs["art-content"];
+      console.log(articleContent);
       const imgs = articleContent.querySelectorAll("img");
       console.log(imgs);
       const images = [];
