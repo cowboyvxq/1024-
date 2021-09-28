@@ -203,6 +203,7 @@ export default {
       console.log(articleContent);
       const imgs = articleContent.querySelectorAll("img");
       console.log(imgs);
+      console.log(imgs);
       const images = [];
       imgs.forEach((img, index) => {
         images.push(imgs.src);

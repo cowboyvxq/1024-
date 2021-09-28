@@ -17,16 +17,19 @@
       </div>
       <div class="user">
         <div class="user-info">
-          <img src="https://avatars.githubusercontent.com/u/958063?v=4&s=120" alt="" />
+          <img
+            src="https://avatars.githubusercontent.com/u/958063?v=4&s=120"
+            alt=""
+          />
           <div class="login-info">
-            <div>梦想像笔檫</div> 
-            <div>码龄{{CodeAge(serumitem.create_at)}}</div>
+            <div>梦想像笔檫</div>
+            <div>码龄{{ CodeAge(serumitem.create_at) }}</div>
           </div>
         </div>
         <div class="attention">
           <van-icon name="plus" />
           <span>关注</span>
-          </div>
+        </div>
       </div>
       <div class="main-point" v-html="serumitem.content"></div>
       <!-- 文章内容 -->
@@ -35,7 +38,7 @@
       </div>
       <!-- 评论区 -->
     </div>
-      <Discuss></Discuss>
+    <Discuss></Discuss>
   </div>
 </template>
 
@@ -67,30 +70,8 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
-         setTimeout(() => {
-        this.previewImage();
-      }, 0);
     },
-
-    //  // 图片放大预览
-    // previewImage() {
-    //   const articleContent = this.$refs["art-content"];
-    //   const imgs = articleContent.querySelectorAll("img");
-    //   console.log(articleContent);
-    //   console.log(imgs);
-    //   const images = [];
-    //   imgs.forEach((img, index) => {
-    //     images.push(imgs.src);
-    //     img.onclick = () => {
-    //       ImagePreview({
-    //         images,
-    //         startPositon: index,
-    //       });
-    //     };
-    //   });
-    // },
-     CodeAge(time) {
+    CodeAge(time) {
       time = (Date.now() - new Date(time).getTime()) / 1000;
       if (time < 3600) {
         return ~~(time / 60) + "分钟";
@@ -197,9 +178,9 @@ export default {
 
     .main-point {
       .markdown-text {
-         p {
-           word-break: break-all;
-         }
+        p {
+          word-break: break-all;
+        }
       }
     }
   }
