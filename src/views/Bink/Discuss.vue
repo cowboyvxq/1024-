@@ -16,7 +16,8 @@
             >
           </div>
           <div class="right">
-            <i class="iconfont icon-dianzan_active-copy-copy-copy"></i>
+            <!-- <i class="iconfont icon-dianzan_active-copy-copy-copy"></i> -->
+            <img class="dianzan" src="../../assets/点赞.png" alt="">
           </div>
         </div>
         <div class="remark" v-html="item.content"></div>
@@ -98,6 +99,12 @@ export default {
           .floor {
             color: #5d8ef7;
             font-size: 14px;
+          }
+        }
+        .right {
+          .dianzan {
+            width: 20px;
+            height: 20px;
           }
         }
       }

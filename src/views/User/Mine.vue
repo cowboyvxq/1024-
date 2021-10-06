@@ -4,20 +4,11 @@
     <div v-if="user" class="header user-info">
       <div class="base-info">
         <div class="left">
-          <van-image
-            class="avatar"
-            :src="userInfo.photo"
-            round
-            fit="cover"
-          />
+          <van-image class="avatar" :src="userInfo.photo" round fit="cover" />
           <span class="name">{{ userInfo.name }}</span>
         </div>
         <div class="right">
-          <van-button
-            size="mini"
-            round
-            to="/user/profile"
-          >编辑资料</van-button>
+          <van-button size="mini" round to="/user/profile">编辑资料</van-button>
         </div>
       </div>
       <div class="data-stats">
@@ -50,19 +41,21 @@
     <!-- 宫格导航 -->
     <van-grid class="grid-nav mb-9" :column-num="2" clickable>
       <van-grid-item class="grid-item">
-        <i slot="icon" class="iconfont icon-shoucang"></i>
-        <span slot="text" class="text">收藏</span>
+        <!-- <i slot="icon" class="iconfont icon-shoucang"></i> -->
+        <img src="../../assets/收 藏 (1).png" alt="" />
+        <span class="text">收藏</span>
       </van-grid-item>
       <van-grid-item class="grid-item">
-        <i slot="icon" class="iconfont icon-lishi"></i>
-        <span slot="text" class="text">历史</span>
+        <!-- <i slot="icon" class="iconfont icon-lishi"></i> -->
+        <img src="../../assets/历史记录.png" alt="" />
+        <span class="text">足迹</span>
       </van-grid-item>
     </van-grid>
     <!-- /宫格导航 -->
 
-    <van-cell icon='chat-o' title="消息通知" is-link />
-    <van-cell class="mb-9" icon="clock-o"  title="浏览记录" is-link />
-    <van-cell icon="chat-o" title="小思同学" is-link to="/chat" />
+    <van-cell icon="chat-o" title="消息通知" is-link />
+    <van-cell class="mb-9" icon="clock-o" title="浏览记录" is-link />
+    <van-cell icon="comment-circle-o" title="小思同学" is-link to="/chat" />
     <van-cell
       v-if="user"
       class="logout-cell"
@@ -74,56 +67,59 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { getUserInfo } from '@/api/user'
+import { mapState } from "vuex";
+import { getUserInfo } from "@/api/user";
 
 export default {
-  name: 'MyIndex',
+  name: "MyIndex",
   components: {},
   props: {},
-  data () {
+  data() {
     return {
-      userInfo: {} // 用户信息
-    }
+      userInfo: {}, // 用户信息
+    };
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(["user"]),
   },
   watch: {},
-  created () {
+  created() {
     // 如果用户登录了，则请求加载用户信息数据
     if (this.user) {
-      this.loadUserInfo()
+      this.loadUserInfo();
     }
   },
-  mounted () {},
+  mounted() {},
   methods: {
-    onLogout () {
+    onLogout() {
       // 退出提示
       // 在组件中需要使用 this.$dialog 来调用弹框组件
-      this.$dialog.confirm({
-        title: '确认退出吗？'
-      }).then(() => {
-        // on confirm
-        // 确认退出：清除登录状态（容器中的 user + 本地存储中的 user）
-        this.$store.commit('setUser', null)
-      }).catch(() => {
-        // on cancel
-        console.log('取消执行这里')
-      })
+      this.$dialog
+        .confirm({
+          title: "确认退出吗？",
+        })
+        .then(() => {
+          // on confirm
+          // 确认退出：清除登录状态（容器中的 user + 本地存储中的 user）
+          this.$store.commit("setUser", null);
+        })
+        .catch(() => {
+          // on cancel
+          console.log("取消执行这里");
+        });
     },
 
-    async loadUserInfo () {
+    async loadUserInfo() {
       try {
-        const { data } = await getUserInfo()
+        const { data } = await getUserInfo();
         console.log(data);
-        this.userInfo = data.data
+        this.userInfo = data.data;
       } catch (err) {
-        this.$toast('获取数据失败，请稍后重试')
+        this.$toast("获取数据失败，请稍后重试");
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped lang="less">

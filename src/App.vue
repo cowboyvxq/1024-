@@ -4,17 +4,17 @@
     <router-view />
     <van-tabbar route v-if="$route.meta.showTabBar">
       <van-tabbar-item icon="wap-home-o" to="/"> 首页 </van-tabbar-item>
-      <van-tabbar-item icon="smile-comment-o" to="/learn">
-        <i slot="icon" class="iconfont icon-xuexi"></i>
-        <span class="text">学习</span>
+      <van-tabbar-item to="/learn">
+        <!-- <i slot="icon" class="iconfont icon-xuexi"></i> -->
+        <img class="learn_icon" src="./assets/学习.png" alt="" />
+        <div class="text">学习</div>
       </van-tabbar-item>
       <van-tabbar-item to="/bink">
-        <i slot="icon" class="iconfont icon-icon_luntan-xian"></i>
-        <span class="text">Bink</span>
+        <img class="bink_icon" src="./assets/icon_论坛-线.png" alt="" />
+        <div class="text">Bink</div>
       </van-tabbar-item>
       <van-tabbar-item icon="setting-o" to="/mine">
-        <i slot="icon" class="iconfont icon-wode"></i>
-        <span class="text">{{ $store.state.user ? "我的" : "未登录" }}</span>
+        <div class="text">{{ $store.state.user ? "我的" : "未登录" }}</div>
       </van-tabbar-item>
     </van-tabbar>
   </div>
@@ -31,6 +31,12 @@ export default {
 };
 </script>
 <style lang="less">
+.learn_icon,
+.bink_icon {
+  width: 22px;
+  height: 22px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

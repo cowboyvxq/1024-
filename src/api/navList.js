@@ -1,6 +1,7 @@
 // 封装与文章相关API的接口
 // import request from '../utils/request'
 import instance from "../utils/instance";
+import store from "../store/index";
 //  获取用户频道列表
 export const getChannelApi = () => {
   return instance.get("/v1_0/user/channels");

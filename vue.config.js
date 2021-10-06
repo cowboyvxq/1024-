@@ -1,6 +1,7 @@
+/**
+ * @type {import('@vue/cli-service').ProjectOptions}
+ */
 module.exports = {
-  devServer: {
-    host: "localhost",
-    port: 8080,
-  },
+  // 选项...
+  publicPath: "./",
 };

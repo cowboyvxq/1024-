@@ -1,5 +1,19 @@
 <template>
   <div class="learn">
+    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+  <van-swipe-item>
+    <img src="https://s2.51cto.com/oss/202109/29/d57b04a9115e3c0b256b51812c656648.png" alt="">
+  </van-swipe-item>
+  <van-swipe-item>
+    <img src="https://s2.51cto.com/oss/202109/29/b845ce52e002eab9820911bee3748ac9.png" alt="">
+  </van-swipe-item>
+  <van-swipe-item>
+    <img src="https://s3.51cto.com/oss/202109/28/1598dc666a1e9b8e233f2f492bffccfd.jpg" alt="">
+  </van-swipe-item>
+  <van-swipe-item>
+    <img src="https://s1.51ctocdn.cn/images/avater/202110/c45bdf110f08256c899081e10bfcaefa27fc04.jpg?x-oss-process=image/resize,m_fixed,w_532,h_300" alt="">
+  </van-swipe-item>
+</van-swipe>
     <!-- 下拉刷新 -->
     <van-pull-refresh
       v-model="isLoading"
@@ -128,8 +142,15 @@ export default {
 <style lang="less" scoped>
 .learn {
   padding-bottom: 30px;
-  padding-right: 10px;
+  .my-swipe .van-swipe-item {
+    img {
+      width: 100vw;
+      height: 200px;
+    }
+  }
   .content {
+    padding-right: 10px;
+    margin-top: 25px;
     .c_item {
       display: flex;
       margin-bottom: 10px;
@@ -138,6 +159,7 @@ export default {
         height: 85px;
         overflow: hidden;
         vertical-align: top;
+        padding-left: 10px;
         img {
           width: 100%;
           height: 100%;
@@ -145,7 +167,7 @@ export default {
       }
       .i_right {
         flex: 1;
-        padding: 0 6px;
+        padding: 0 10px;
         box-sizing: border-box;
         .r_title {
           font-weight: bold;

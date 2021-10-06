@@ -57,8 +57,6 @@
 <script>
 import {
   getAllChannelAPI,
-  deleteUserChannel,
-  addUserChannel,
 } from "@/api/navList";
 import { mapState } from "vuex";
 import { setItem } from "@/utils/stroage";
